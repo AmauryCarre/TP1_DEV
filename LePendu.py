@@ -8,15 +8,19 @@ Le Pendu
 """
 from random import choice
 
-fich=open('mots.txt','r')
-words=[]
-for i in fich:
-    words.append(i.strip()) #words=[i.strip() for i in fich]
-answer = choice(words)
-fich.close()
+def getanswer(): 
+    fich=open('mots.txt','r')
+    words=[]
+    for i in fich:
+        words.append(i.strip())
+    answer = choice(words)
+    fich.close()
+    return answer
+
+answer=getanswer()
+print(answer)  #pour les test
 
 lives = 8
-display =""
 right_pick = ""
 right_pick += answer[0]
 wrong_pick = ""
@@ -29,30 +33,48 @@ def getdisplay(answer,right_pick):
         else:
             display += "_ "
     return display
-display = getdisplay(answer,right_pick)
 
-while lives > 0:
-    print("Le mot à deviner est : ", display)
-    n=input("Proposez une lettre : ")
-    
-    if n in wrong_pick:
-        print("vous avez déjà proposé cette lettre")
-        lives += 1
-    
-    if n in answer:
-        right_pick += n
-        print("-> Bien vu!")
-    else:
-        lives -= 1
-        wrong_pick += n
-        print("-> Nope")
-        print("votre nombre de vie", lives, "\n")
-    
+display = getdisplay(answer,right_pick)   
+
+def Pendu(lives,right_pick,wrong_pick,answer,display):
+    while lives > 0:
+        print("Le mot à deviner est : ", display)
+        n=input("Proposez une lettre : ")
+        
+        if n in wrong_pick:
+            print("vous avez déjà proposé cette lettre")
+            lives += 1
+        
+        if n in answer:
+            right_pick += n
+            print("-> Bien vu!")
+        else:
+            lives -= 1
+            wrong_pick += n
+            print("-> Nope")
+            print("votre nombre de vie", lives, "\n")
+        
+        display = getdisplay(answer,right_pick)
+        
+        if "_" not in display:
+            print(">>> Gagné! <<<")
+            break
+    #la partie de dessous représente le choix de rejouer
+    answer=getanswer()
+    print(answer)  #pour les test
+    lives = 8
+    right_pick = ""
+    right_pick += answer[0]
+    wrong_pick = ""
     display = getdisplay(answer,right_pick)
+    
+    r=input("veux tu rejouer? oui ou non? ")
+    if r=="oui":
+        Pendu(lives,right_pick,wrong_pick,answer,display)
+    elif r=="non":
+        print("Dommage")
+        
 
-    if "_" not in display:
-        print(">>> Gagné! <<<")
-        break
-
+Pendu(lives,right_pick,wrong_pick,answer,display)
 
 
