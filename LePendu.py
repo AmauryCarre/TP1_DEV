@@ -8,23 +8,28 @@ Le Pendu
 """
 from random import choice
 
-
 fich=open('mots.txt','r')
-words=[i.strip() for i in fich]
+words=[]
+for i in fich:
+    words.append(i.strip()) #words=[i.strip() for i in fich]
 answer = choice(words)
 fich.close()
 
 lives = 8
-display = ""
+display =""
 right_pick = ""
 right_pick += answer[0]
 wrong_pick = ""
 
-for i in answer:
-    if i in right_pick:
-        display += i + " "
-    else:
-        display += "_ "
+def getdisplay(answer,right_pick):
+    display = ""
+    for i in answer:
+        if i in right_pick:
+            display += i + " "
+        else:
+            display += "_ "
+    return display
+display = getdisplay(answer,right_pick)
 
 while lives > 0:
     print("Le mot à deviner est : ", display)
@@ -43,17 +48,11 @@ while lives > 0:
         print("-> Nope")
         print("votre nombre de vie", lives, "\n")
     
-    display = ""
-    for i in answer:
-        if i in right_pick:
-            display += i + " "
-        else:
-            display += "_ "
+    display = getdisplay(answer,right_pick)
 
     if "_" not in display:
         print(">>> Gagné! <<<")
         break
-
 
 
 
